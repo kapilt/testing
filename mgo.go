@@ -137,6 +137,11 @@ func generatePEM(path string, serverCert *x509.Certificate, serverKey *rsa.Priva
 
 // Start starts a MongoDB server in a temporary directory.
 func (inst *MgoInstance) Start(certs *Certs) error {
+	var start time.Time
+	defer func() {
+		fmt.Printf("Time to start MgoInstance: %v\n", time.Now().Sub(start))
+	}()
+	start = time.Now()
 	dbdir, err := ioutil.TempDir("", "test-mgo")
 	if err != nil {
 		return err
@@ -477,6 +482,12 @@ func MgoDialInfo(certs *Certs, addrs ...string) *mgo.DialInfo {
 }
 
 func (s *MgoSuite) SetUpTest(c *gc.C) {
+	var start time.Time
+	defer func() {
+		fmt.Printf("Time to run SetUpTest: %v\n", time.Now().Sub(start))
+	}()
+	start = time.Now()
+
 	mgo.ResetStats()
 	s.Session = MgoServer.MustDial()
 	dropAll(s.Session)
@@ -598,6 +609,12 @@ func isUnauthorized(err error) bool {
 }
 
 func (s *MgoSuite) TearDownTest(c *gc.C) {
+	var start time.Time
+	defer func() {
+		fmt.Printf("Time to run TearDownTest: %v\n", time.Now().Sub(start))
+	}()
+	start = time.Now()
+
 	MgoServer.Reset()
 	s.Session.Close()
 	for i := 0; ; i++ {
