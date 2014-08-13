@@ -197,17 +197,22 @@ func (inst *MgoInstance) run() error {
 		"--dbpath", inst.dir,
 		"--port", mgoport,
 		"--nssize", "1",
-		"--noprealloc",
-		"--smallfiles",
+		//		"--noprealloc",
+		//		"--smallfiles",
 		"--nohttpinterface",
 		"--nounixsocket",
+		"--cleanerPeriod", "0",
+		"--cleanerIterations", "0",
+		"--checkpointPeriod", "0",
+		"--setParameter", "defaultCompression=none",
+		"--setParameter", "defaultFanout=4",
 		"--oplogSize", "10",
 		"--keyFile", filepath.Join(inst.dir, "keyfile"),
-		"--ipv6",
+		//		"--ipv6",
 	}
-	if !inst.EnableJournal {
-		mgoargs = append(mgoargs, "--nojournal")
-	}
+	//	if !inst.EnableJournal {
+	//		mgoargs = append(mgoargs, "--nojournal")
+	//	}
 	if inst.certs != nil {
 		mgoargs = append(mgoargs,
 			"--sslOnNormalPorts",
